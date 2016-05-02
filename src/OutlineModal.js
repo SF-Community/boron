@@ -1,8 +1,7 @@
-var modalFactory = require('./modalFactory');
-
 var React = require('react');
-var insertKeyframesRule = require('react-kit/insertKeyframesRule');
-var appendVendorPrefix = require('react-kit/appendVendorPrefix');
+var modalFactory = require('./modalFactory');
+var insertKeyframesRule = require('domkit/insertKeyframesRule');
+var appendVendorPrefix = require('domkit/appendVendorPrefix');
 
 var animation = {
     show: {

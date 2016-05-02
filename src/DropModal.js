@@ -1,6 +1,6 @@
 var modalFactory = require('./modalFactory');
-var insertKeyframesRule = require('react-kit/insertKeyframesRule');
-var appendVendorPrefix = require('react-kit/appendVendorPrefix');
+var insertKeyframesRule = require('domkit/insertKeyframesRule');
+var appendVendorPrefix = require('domkit/appendVendorPrefix');
 
 var animation = {
     show: {
@@ -122,6 +122,7 @@ module.exports = modalFactory({
     getContentStyle: function(willHidden) {
         return appendVendorPrefix({
             margin: 0,
+            opacity: 0,
             animationDuration: (willHidden ? hideAnimation : showAnimation).animationDuration,
             animationFillMode: 'forwards',
             animationDelay: '0.25s',

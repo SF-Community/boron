@@ -1,5 +1,6 @@
 var React = require('react');
-var transitionEvents = require('react-kit/transitionEvents');
+var transitionEvents = require('domkit/transitionEvents');
+var appendVendorPrefix = require('domkit/appendVendorPrefix');
 
 module.exports = function(animation){
 
@@ -11,10 +12,11 @@ module.exports = function(animation){
             onShow: React.PropTypes.func,
             onHide: React.PropTypes.func,
             animation: React.PropTypes.object,
-            backdrop: React.PropTypes.oneOfType([
-                React.PropTypes.bool,
-                React.PropTypes.string
-            ])
+            backdrop: React.PropTypes.bool,
+            closeOnClick: React.PropTypes.bool,
+            modalStyle: React.PropTypes.object,
+            backdropStyle: React.PropTypes.object,
+            contentStyle: React.PropTypes.object,
         },
 
         getDefaultProps: function() {
@@ -24,7 +26,11 @@ module.exports = function(animation){
                 onHide: function(){},
                 animation: animation,
                 keyboard: true,
-                backdrop: true
+                backdrop: true,
+                closeOnClick: true,
+                modalStyle: {},
+                backdropStyle: {},
+                contentStyle: {},
             };
         },
 
@@ -39,24 +45,29 @@ module.exports = function(animation){
             return this.state.hidden;
         },
 
-        componentDidMount: function(){
-            var ref = this.props.animation.getRef();
-            var node = this.refs[ref].getDOMNode();
-            var endListener = function(e) {
-                if (e && e.target !== node) {
-                    return;
-                }
-                transitionEvents.removeEndEventListener(node, endListener);
-                this.enter();
+        addTransitionListener: function(node, handle){
+            if (node) {
+              var endListener = function(e) {
+                  if (e && e.target !== node) {
+                      return;
+                  }
+                  transitionEvents.removeEndEventListener(node, endListener);
+                  handle();
+              };
+              transitionEvents.addEndEventListener(node, endListener);
+            }
+        },
 
-            }.bind(this);
-            transitionEvents.addEndEventListener(node, endListener);
+        handleBackdropClick: function() {
+            if (this.props.closeOnClick) {
+                this.hide();
+            }
         },
 
         render: function() {
 
             var hidden = this.hasHidden();
-            if(hidden) return null;
+            if (hidden) return null;
 
             var willHidden = this.state.willHidden;
             var animation = this.props.animation;
@@ -65,26 +76,34 @@ module.exports = function(animation){
             var contentStyle = animation.getContentStyle(willHidden);
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
-            var backdrop = this.props.backdrop? <div onClick={this.hide} style={backdropStyle}/>: undefined;
 
-            if (this.props.customStyle) {
-                for (var style in this.props.customStyle) {
-                    modalStyle[style] = this.props.customStyle[style];
-                };
+            // Apply custom style properties
+            if (this.props.modalStyle) {
+                var prefixedModalStyle = appendVendorPrefix(this.props.modalStyle);
+                for (var style in prefixedModalStyle) {
+                    modalStyle[style] = prefixedModalStyle[style];
+                }
             }
 
+            if (this.props.backdropStyle) {
+              var prefixedBackdropStyle = appendVendorPrefix(this.props.backdropStyle);
+                for (var style in prefixedBackdropStyle) {
+                    backdropStyle[style] = prefixedBackdropStyle[style];
+                }
+            }
+
+            if (this.props.contentStyle) {
+              var prefixedContentStyle = appendVendorPrefix(this.props.contentStyle);
+                for (var style in prefixedContentStyle) {
+                    contentStyle[style] = prefixedContentStyle[style];
+                }
+            }
+
+            var backdrop = this.props.backdrop? <div style={backdropStyle} onClick={this.props.closeOnClick? this.handleBackdropClick: null} />: undefined;
+
             if(willHidden) {
-                var node = this.refs[ref].getDOMNode();
-                var endListener = function(e) {
-                    if (e && e.target !== node) {
-                        return;
-                    }
-
-                    transitionEvents.removeEndEventListener(node, endListener);
-                    this.leave();
-
-                }.bind(this);
-                transitionEvents.addEndEventListener(node, endListener);
+                var node = this.refs[ref];
+                this.addTransitionListener(node, this.leave);
             }
 
             return (<span>
@@ -111,16 +130,22 @@ module.exports = function(animation){
         },
 
         show: function(){
-            if(!this.hasHidden()) return;
+            if (!this.hasHidden()) return;
 
             this.setState({
                 willHidden: false,
                 hidden: false
             });
+
+            setTimeout(function(){
+              var ref = this.props.animation.getRef();
+              var node = this.refs[ref];
+              this.addTransitionListener(node, this.enter);
+            }.bind(this), 0);
         },
 
         hide: function(){
-            if(this.hasHidden()) return;
+            if (this.hasHidden()) return;
 
             this.setState({
                 willHidden: true
@@ -128,7 +153,7 @@ module.exports = function(animation){
         },
 
         toggle: function(){
-            if(this.hasHidden())
+            if (this.hasHidden())
                 this.show();
             else
                 this.hide();
@@ -142,14 +167,12 @@ module.exports = function(animation){
             }
         },
 
-        componentDidMount: function() {
+        componentDidMount: function(){
             window.addEventListener("keydown", this.listenKeyboard, true);
         },
 
         componentWillUnmount: function() {
             window.removeEventListener("keydown", this.listenKeyboard, true);
-        },
-
+        }
     });
-
 }

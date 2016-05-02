@@ -1,6 +1,6 @@
 var modalFactory = require('./modalFactory');
-var insertKeyframesRule = require('react-kit/insertKeyframesRule');
-var appendVendorPrefix = require('react-kit/appendVendorPrefix');
+var insertKeyframesRule = require('domkit/insertKeyframesRule');
+var appendVendorPrefix = require('domkit/appendVendorPrefix');
 
 var animation = {
     show: {
@@ -12,7 +12,6 @@ var animation = {
         animationTimingFunction: 'ease-out'
     },
     showContentAnimation: insertKeyframesRule({
-
         '0%': {
             opacity: 0
         },
