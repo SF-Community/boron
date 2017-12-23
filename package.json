@@ -1,23 +1,77 @@
 {
-  "name": "boron",
-  "version": "0.2.3",
-  "description": "A collection of dialog animations with React.js",
-  "main": "Boron.js",
-  "author": "Yuanyan Cao",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yuanyan/boron.git"
+  "_args": [
+    [
+      {
+        "raw": "boron@git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+        "scope": null,
+        "escapedName": "boron",
+        "name": "boron",
+        "rawSpec": "git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+        "spec": "git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+          "sshUrl": "git+ssh://git@github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+          "httpsUrl": "git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+          "gitUrl": "git://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+          "shortcut": "github:SF-Community/boron#204c482a3439e1f59258729fe1ae5b0b02a27774",
+          "directUrl": "https://raw.githubusercontent.com/SF-Community/boron/204c482a3439e1f59258729fe1ae5b0b02a27774/package.json"
+        }
+      },
+      "/home/vagrant/scadafence/sf-dashboard"
+    ]
+  ],
+  "_from": "git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+  "_id": "boron@0.1.2",
+  "_inCache": true,
+  "_location": "/boron",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "boron@git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+    "scope": null,
+    "escapedName": "boron",
+    "name": "boron",
+    "rawSpec": "git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+    "spec": "git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+      "sshUrl": "git+ssh://git@github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+      "httpsUrl": "git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+      "gitUrl": "git://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+      "shortcut": "github:SF-Community/boron#204c482a3439e1f59258729fe1ae5b0b02a27774",
+      "directUrl": "https://raw.githubusercontent.com/SF-Community/boron/204c482a3439e1f59258729fe1ae5b0b02a27774/package.json"
+    }
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+  "_shasum": "1c6713f65ba4164750042871e5c4238a0c399447",
+  "_shrinkwrap": null,
+  "_spec": "boron@git+https://github.com/SF-Community/boron.git#204c482a3439e1f59258729fe1ae5b0b02a27774",
+  "_where": "/home/vagrant/scadafence/sf-dashboard",
+  "author": {
+    "name": "Yuanyan Cao"
+  },
+  "browserify": {
+    "transform": [
+      "reactify"
+    ]
+  },
+  "browserify-shim": {
+    "react": "global:React"
+  },
+  "bugs": {
+    "url": "https://github.com/yuanyan/boron/issues"
   },
   "dependencies": {
-    "domkit": "^0.0.1"
+    "react-kit": "^0.1.2"
   },
-  "peerDependencies": {
-    "react": ">=0.14.0"
-  },
+  "description": "A collection of dialog animations with React.js",
   "devDependencies": {
-    "react-dom": ">=0.14.0",
-    "reactify": "^0.17.0",
     "browserify": "^6.3.3",
     "browserify-shim": "^3.8.0",
     "chalk": "^0.5.1",
@@ -29,31 +83,40 @@
     "gulp-gh-pages": "^0.4.0",
     "gulp-git": "^0.5.5",
     "gulp-less": "^1.3.6",
+    "gulp-react": "^3.0.1",
     "gulp-rename": "^1.2.0",
     "gulp-streamify": "^0.0.5",
     "gulp-uglify": "^1.0.1",
     "gulp-util": "^3.0.1",
     "merge-stream": "^0.1.6",
+    "reactify": "^0.17.0",
     "vinyl-paths": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
-    "watchify": "^2.1.1",
-    "gulp-react": "^3.0.1"
+    "watchify": "^2.1.1"
   },
-  "browserify": {
-    "transform": [
-      "reactify"
-    ]
-  },
-  "browserify-shim": {
-    "react": "global:React"
-  },
-  "scripts": {
-    "release": "gulp release"
-  },
+  "gitHead": "204c482a3439e1f59258729fe1ae5b0b02a27774",
+  "homepage": "https://github.com/yuanyan/boron#readme",
   "keywords": [
     "react",
     "react-component",
     "dialog",
     "modal"
-  ]
+  ],
+  "license": "MIT",
+  "main": "Boron.js",
+  "name": "boron",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "react": ">=0.12.0"
+  },
+  "readme": "Boron\n=====\n\n[![Pair on this](https://tf-assets-staging.s3.amazonaws.com/badges/thinkful_repo_badge.svg)](http://start.thinkful.com/react/?utm_source=github&utm_medium=badge&utm_campaign=boron)\n\nA collection of dialog animations with React.js.\n\n## Demo & Examples\n\nLive demo: [yuanyan.github.io/boron](http://yuanyan.github.io/boron/)\n\nTo build the examples locally, run:\n\n```\nnpm install\ngulp dev\n```\n\nThen open [`localhost:9999`](http://localhost:9999) in a browser.\n\n## Installation\n\nThe easiest way to use `boron` is to install it from NPM and include it in your own React build process (using [Browserify](http://browserify.org), etc).\n\nYou can also use the standalone build by including `dist/boron.js` in your page. If you use this, make sure you have already included React, and it is available as a global variable.\n\n```\nnpm install boron --save\n```\n\n## Usage\n\n``` javascript\nvar Modal = require('boron/DropModal');\nvar Example = React.createClass({\n    showModal: function(){\n        this.refs.modal.show();\n    },\n    hideModal: function(){\n        this.refs.modal.hide();\n    },\n    render: function() {\n        return (\n            <div>\n                <button onClick={this.showModal}>Open</button>\n                <Modal ref=\"modal\">\n                    <h2>I'm a dialog</h2>\n                    <button onClick={this.hideModal}>Close</button>\n                </Modal>\n            </div>\n        );\n    }\n});\n```\n\n\n## Modals\n\n* DropModal\n* FadeModal\n* FlyModal\n* OutlineModal\n* ScaleModal\n* WaveModal\n\n## Browser Support\n\n![IE](https://raw.github.com/alrra/browser-logos/master/internet-explorer/internet-explorer_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/safari/safari_48x48.png)\n--- | --- | --- | --- | --- |\nIE 10+ ✔ | Chrome 4.0+ ✔ | Firefox 16.0+ ✔ | Opera 15.0+ ✔ | Safari 4.0+ ✔ |\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yuanyan/boron.git"
+  },
+  "scripts": {
+    "release": "gulp release"
+  },
+  "version": "0.1.2"
 }

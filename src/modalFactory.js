@@ -1,22 +1,23 @@
+var PropTypes = require('prop-types');
 var React = require('react');
-var transitionEvents = require('domkit/transitionEvents');
-var appendVendorPrefix = require('domkit/appendVendorPrefix');
+var createReactClass = require('create-react-class');
+var transitionEvents = require('react-kit/transitionEvents');
+var ReactDOM = require('react-dom');
 
 module.exports = function(animation){
 
-    return React.createClass({
+    return createReactClass({
         propTypes: {
-            className: React.PropTypes.string,
+            className: PropTypes.string,
             // Close the modal when esc is pressed? Defaults to true.
-            keyboard: React.PropTypes.bool,
-            onShow: React.PropTypes.func,
-            onHide: React.PropTypes.func,
-            animation: React.PropTypes.object,
-            backdrop: React.PropTypes.bool,
-            closeOnClick: React.PropTypes.bool,
-            modalStyle: React.PropTypes.object,
-            backdropStyle: React.PropTypes.object,
-            contentStyle: React.PropTypes.object,
+            keyboard: PropTypes.bool,
+            onShow: PropTypes.func,
+            onHide: PropTypes.func,
+            animation: PropTypes.object,
+            backdrop: PropTypes.oneOfType([
+                PropTypes.bool,
+                PropTypes.string
+            ])
         },
 
         getDefaultProps: function() {
@@ -26,11 +27,7 @@ module.exports = function(animation){
                 onHide: function(){},
                 animation: animation,
                 keyboard: true,
-                backdrop: true,
-                closeOnClick: true,
-                modalStyle: {},
-                backdropStyle: {},
-                contentStyle: {},
+                backdrop: true
             };
         },
 
@@ -45,29 +42,24 @@ module.exports = function(animation){
             return this.state.hidden;
         },
 
-        addTransitionListener: function(node, handle){
-            if (node) {
-              var endListener = function(e) {
-                  if (e && e.target !== node) {
-                      return;
-                  }
-                  transitionEvents.removeEndEventListener(node, endListener);
-                  handle();
-              };
-              transitionEvents.addEndEventListener(node, endListener);
-            }
-        },
+        componentDidMount: function(){
+            var ref = this.props.animation.getRef();
+            var node = ReactDOM.findDOMNode(this.refs[ref]);
+            var endListener = function(e) {
+                if (e && e.target !== node) {
+                    return;
+                }
+                transitionEvents.removeEndEventListener(node, endListener);
+                this.enter();
 
-        handleBackdropClick: function() {
-            if (this.props.closeOnClick) {
-                this.hide();
-            }
+            }.bind(this);
+            transitionEvents.addEndEventListener(node, endListener);
         },
 
         render: function() {
 
             var hidden = this.hasHidden();
-            if (hidden) return null;
+            if(hidden) return null;
 
             var willHidden = this.state.willHidden;
             var animation = this.props.animation;
@@ -76,45 +68,37 @@ module.exports = function(animation){
             var contentStyle = animation.getContentStyle(willHidden);
             var ref = animation.getRef(willHidden);
             var sharp = animation.getSharp && animation.getSharp(willHidden);
+            var backdrop = this.props.backdrop? React.createElement("div", {onClick: this.hide, style: backdropStyle}): undefined;
 
-            // Apply custom style properties
-            if (this.props.modalStyle) {
-                var prefixedModalStyle = appendVendorPrefix(this.props.modalStyle);
-                for (var style in prefixedModalStyle) {
-                    modalStyle[style] = prefixedModalStyle[style];
-                }
+            if (this.props.customStyle) {
+                for (var style in this.props.customStyle) {
+                    modalStyle[style] = this.props.customStyle[style];
+                };
             }
-
-            if (this.props.backdropStyle) {
-              var prefixedBackdropStyle = appendVendorPrefix(this.props.backdropStyle);
-                for (var style in prefixedBackdropStyle) {
-                    backdropStyle[style] = prefixedBackdropStyle[style];
-                }
-            }
-
-            if (this.props.contentStyle) {
-              var prefixedContentStyle = appendVendorPrefix(this.props.contentStyle);
-                for (var style in prefixedContentStyle) {
-                    contentStyle[style] = prefixedContentStyle[style];
-                }
-            }
-
-            var backdrop = this.props.backdrop? <div style={backdropStyle} onClick={this.props.closeOnClick? this.handleBackdropClick: null} />: undefined;
 
             if(willHidden) {
-                var node = this.refs[ref];
-                this.addTransitionListener(node, this.leave);
+                var node = ReactDOM.findDOMNode(this.refs[ref]);
+                var endListener = function(e) {
+                    if (e && e.target !== node) {
+                        return;
+                    }
+
+                    transitionEvents.removeEndEventListener(node, endListener);
+                    this.leave();
+
+                }.bind(this);
+                transitionEvents.addEndEventListener(node, endListener);
             }
 
-            return (<span>
-                <div ref="modal" style={modalStyle} className={this.props.className}>
-                    {sharp}
-                    <div ref="content" tabIndex="-1" style={contentStyle}>
-                        {this.props.children}
-                    </div>
-                </div>
-                {backdrop}
-             </span>)
+            return (React.createElement("span", null,
+                React.createElement("div", {ref: "modal", style: modalStyle, className: this.props.className},
+                    sharp,
+                    React.createElement("div", {ref: "content", tabIndex: "-1", style: contentStyle},
+                        this.props.children
+                    )
+                ),
+                backdrop
+             ))
             ;
         },
 
@@ -130,22 +114,16 @@ module.exports = function(animation){
         },
 
         show: function(){
-            if (!this.hasHidden()) return;
+            if(!this.hasHidden()) return;
 
             this.setState({
                 willHidden: false,
                 hidden: false
             });
-
-            setTimeout(function(){
-              var ref = this.props.animation.getRef();
-              var node = this.refs[ref];
-              this.addTransitionListener(node, this.enter);
-            }.bind(this), 0);
         },
 
         hide: function(){
-            if (this.hasHidden()) return;
+            if(this.hasHidden()) return;
 
             this.setState({
                 willHidden: true
@@ -153,7 +131,7 @@ module.exports = function(animation){
         },
 
         toggle: function(){
-            if (this.hasHidden())
+            if(this.hasHidden())
                 this.show();
             else
                 this.hide();
@@ -167,12 +145,14 @@ module.exports = function(animation){
             }
         },
 
-        componentDidMount: function(){
+        componentDidMount: function() {
             window.addEventListener("keydown", this.listenKeyboard, true);
         },
 
         componentWillUnmount: function() {
             window.removeEventListener("keydown", this.listenKeyboard, true);
-        }
+        },
+
     });
+
 }

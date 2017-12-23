@@ -1,7 +1,8 @@
-var React = require('react');
 var modalFactory = require('./modalFactory');
-var insertKeyframesRule = require('domkit/insertKeyframesRule');
-var appendVendorPrefix = require('domkit/appendVendorPrefix');
+
+var React = require('react');
+var insertKeyframesRule = require('react-kit/insertKeyframesRule');
+var appendVendorPrefix = require('react-kit/appendVendorPrefix');
 
 var animation = {
     show: {
@@ -92,21 +93,21 @@ module.exports = modalFactory({
             strokeDasharray: strokeDashLength
         });
 
-        return <div style = {sharpStyle}>
-            <svg
-                xmlns = "http://www.w3.org/2000/svg"
-                width = "100%"
-                height = "100%"
-                viewBox = "0 0 496 136"
-                preserveAspectRatio = "none">
-                <rect style={rectStyle}
-                    x = "2"
-                    y = "2"
-                    fill = "none"
-                    width = "492"
-                    height = "132" />
-            </svg>
-        </div>
+        return React.createElement("div", {style: sharpStyle}, 
+            React.createElement("svg", {
+                xmlns: "http://www.w3.org/2000/svg", 
+                width: "100%", 
+                height: "100%", 
+                viewBox: "0 0 496 136", 
+                preserveAspectRatio: "none"}, 
+                React.createElement("rect", {style: rectStyle, 
+                    x: "2", 
+                    y: "2", 
+                    fill: "none", 
+                    width: "492", 
+                    height: "132"})
+            )
+        )
     },
     getModalStyle: function(willHidden) {
         return appendVendorPrefix({
